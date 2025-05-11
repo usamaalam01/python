@@ -16,7 +16,7 @@ def predict_churn(data):
 
 
 st.title('Customer Churn Prediction')
-#st.subheader('')
+st.subheader('Developed by: Muhammad Usama Alam')
 st.markdown("---")
 
 # Display categorical features
@@ -26,9 +26,6 @@ categorical_input_vals={}
 with st.expander("Click to enter categorical values", expanded=True):
     for i, col in enumerate(categorical_input.get('Column Name').values()):
         categorical_input_vals[col] = st.selectbox(col, categorical_input.get('Members')[i],key=col)
-
-# Load numerical features
-numerical_input = my_feature_dict.get('NUMERICAL')
 
 # Display numerical features
 st.subheader('Numerical Features')
@@ -53,7 +50,7 @@ if st.button('Predict'):
         prediction_translate = translation_dict.get(prediction)
         #st.write(f'The Prediction is **{prediction}**, Hence customer is **{prediction_translate}** to churn.')    
 
-        if prediction == "Yes":
+        if prediction == "Stay":
             st.success(f'🎯 Prediction: **{prediction}** — Customer is **{prediction_translate}** to churn.')
             st.balloons()
         else:
