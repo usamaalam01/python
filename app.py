@@ -15,15 +15,17 @@ def predict_churn(data):
     return prediction
 
 
-st.title('Customer Churn Prediction App')
-st.subheader('Based on Telecom Dataset')
+st.title('Customer Churn Prediction')
+#st.subheader('')
+st.markdown("---")
 
 # Display categorical features
 st.subheader('Categorical Features')
 categorical_input = my_feature_dict.get('CATEGORICAL')
 categorical_input_vals={}
-for i, col in enumerate(categorical_input.get('Column Name').values()):
-    categorical_input_vals[col] = st.selectbox(col, categorical_input.get('Members')[i],key=col)
+with st.expander("Click to enter categorical values", expanded=True):
+    for i, col in enumerate(categorical_input.get('Column Name').values()):
+        categorical_input_vals[col] = st.selectbox(col, categorical_input.get('Members')[i],key=col)
 
 # Load numerical features
 numerical_input = my_feature_dict.get('NUMERICAL')
@@ -40,9 +42,19 @@ input_data = dict(list(categorical_input_vals.items()) + list(numerical_input_va
 
 input_data= pd.DataFrame.from_dict(input_data,orient='index').T
 
+st.markdown("---")
+
+
 # Churn Prediction
 if st.button('Predict'):
-    prediction = predict_churn(input_data)[0]
-    translation_dict = {"Yes": "Expected", "No": "Not Expected"}
-    prediction_translate = translation_dict.get(prediction)
-    st.write(f'The Prediction is **{prediction}**, Hence customer is **{prediction_translate}** to churn.')    
+    with st.spinner("Predicting..."):
+        prediction = predict_churn(input_data)[0]
+        translation_dict = {"Stay": "Not Expected To Leave", "Leave": "Expected To Leave"}
+        prediction_translate = translation_dict.get(prediction)
+        #st.write(f'The Prediction is **{prediction}**, Hence customer is **{prediction_translate}** to churn.')    
+
+        if prediction == "Yes":
+            st.success(f'🎯 Prediction: **{prediction}** — Customer is **{prediction_translate}** to churn.')
+            st.balloons()
+        else:
+            st.info(f'✅ Prediction: **{prediction}** — Customer is **{prediction_translate}** to churn.')
